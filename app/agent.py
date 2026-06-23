@@ -111,6 +111,6 @@ simple_form_agent_app = SimpleFormAgent()
 from google.adk.apps import App
 app = App(
     root_agent=root_agent,
-    name="simple-form-agent",
+    name="app",
 )
 
