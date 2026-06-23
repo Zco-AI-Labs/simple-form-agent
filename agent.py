@@ -9,14 +9,14 @@ from google.adk.runners import Runner
 from google.genai import types
 
 from prompt import SYSTEM_INSTRUCTION
-from tools import show_contact_form, save_contact
+from tools import show_contact_form, save_contact, consultAgent, discover_agents
 
 root_agent = AdkAgent(
     model='gemini-2.5-flash',
     name='simple_form_agent',
     description='Managed GEAP agent for rendering a contact form and saving details.',
     instruction=SYSTEM_INSTRUCTION,
-    tools=[show_contact_form, save_contact],
+    tools=[show_contact_form, save_contact, consultAgent, discover_agents],
 )
 
 class SimpleFormAgent:
@@ -35,9 +35,9 @@ class SimpleFormAgent:
             return f"SimpleFormAgent Runtime Dir: {runtime_dir}\nFiles:\n" + "\n".join(files)
 
         import hubscape_adk
-        user_id = (context or {}).get("userId") or "anonymous_user"
-        org_id = (context or {}).get("orgId")
-        hub_id = (context or {}).get("hubId")
+        user_id = (context or {}).get("userId") or (context or {}).get("user_id") or "anonymous_user"
+        org_id = (context or {}).get("orgId") or (context or {}).get("org_id")
+        hub_id = (context or {}).get("hubId") or (context or {}).get("hub_id")
         
         # Stable UUID
         agent_uuid = str(uuid.uuid5(uuid.NAMESPACE_URL, "https://github.com/Zco-AI-Labs/simple-form-agent"))
