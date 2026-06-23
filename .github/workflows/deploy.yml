@@ -38,4 +38,9 @@ jobs:
           GCP_LOCATION: ${{ vars.GCP_LOCATION || 'us-central1' }}
           GCP_STAGING_BUCKET: ${{ secrets.GCP_STAGING_BUCKET || 'hubscape-geap-reasoning-engines' }}
         run: |
+          cd ..
+          mv simple-form-agent simple_form_agent
+          cd simple_form_agent
           python deploy.py
+          cd ..
+          mv simple_form_agent simple-form-agent
