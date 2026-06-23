@@ -1,4 +1,5 @@
 import os
+os.environ["GOOGLE_GENAI_USE_ENTERPRISE"] = "True"
 import json
 import uuid
 from google.adk.agents.llm_agent import Agent as AdkAgent
