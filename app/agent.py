@@ -108,11 +108,9 @@ class SimpleFormAgent:
 # Singleton instance used as the serialization target
 simple_form_agent_app = SimpleFormAgent()
 
-from google.adk.a2a.utils.agent_to_a2a import to_a2a
-app = to_a2a(root_agent)
-
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.getenv("PORT", 8080))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+from google.adk.apps import App
+app = App(
+    root_agent=root_agent,
+    name="simple-form-agent",
+)
 
