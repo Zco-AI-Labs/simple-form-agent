@@ -8,8 +8,8 @@ from google.adk.agents.llm_agent import Agent as AdkAgent
 from google.adk.runners import Runner
 from google.genai import types
 
-from prompt import SYSTEM_INSTRUCTION
-from tools import show_contact_form, save_contact, consultAgent, discover_agents
+from app.prompt import SYSTEM_INSTRUCTION
+from app.tools import show_contact_form, save_contact, consultAgent, discover_agents
 
 root_agent = AdkAgent(
     model='gemini-2.5-flash',
@@ -34,7 +34,7 @@ class SimpleFormAgent:
                     files.append(os.path.relpath(os.path.join(root, ffiles_in_dir), runtime_dir))
             return f"SimpleFormAgent Runtime Dir: {runtime_dir}\nFiles:\n" + "\n".join(files)
 
-        import hubscape_adk
+        from app import hubscape_adk
         user_id = (context or {}).get("userId") or (context or {}).get("user_id") or "anonymous_user"
         org_id = (context or {}).get("orgId") or (context or {}).get("org_id")
         hub_id = (context or {}).get("hubId") or (context or {}).get("hub_id")
@@ -108,12 +108,11 @@ class SimpleFormAgent:
 # Singleton instance used as the serialization target
 simple_form_agent_app = SimpleFormAgent()
 
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
+app = to_a2a(root_agent)
+
 if __name__ == "__main__":
     import uvicorn
-    from google.adk.a2a.utils.agent_to_a2a import to_a2a
-    
     port = int(os.getenv("PORT", 8080))
-    # root_agent is the ADK Agent instance defined above
-    app = to_a2a(root_agent, host="0.0.0.0", port=port)
     uvicorn.run(app, host="0.0.0.0", port=port)
 

@@ -1,4 +1,4 @@
-import hubscape_adk
+from app import hubscape_adk
 import uuid
 import logging
 import json
