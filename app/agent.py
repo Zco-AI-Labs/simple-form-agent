@@ -1,10 +1,7 @@
 import os
-# Force Developer API (Enterprise) mode ONLY if running locally and not in GCP/Vertex AI
-if os.getenv("GOOGLE_CLOUD_AGENT_ENGINE_ID") or os.getenv("K_SERVICE"):
-    os.environ.pop("GOOGLE_GENAI_USE_ENTERPRISE", None)
-    os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
-elif not os.getenv("GEMINI_API_KEY"):
-    os.environ["GOOGLE_GENAI_USE_ENTERPRISE"] = "True"
+# Force regional Vertex AI routing unconditionally
+os.environ.pop("GOOGLE_GENAI_USE_ENTERPRISE", None)
+os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
 import json
 import uuid
 from google.adk.agents.llm_agent import Agent as AdkAgent
@@ -14,12 +11,10 @@ from google.genai import types
 from app.prompt import SYSTEM_INSTRUCTION
 from app.tools import show_contact_form, save_contact, consultAgent, discover_agents
 
-project_id = os.getenv("PROJECT_ID") or os.getenv("GCP_PROJECT_ID") or "hubscape-geap"
-location = os.getenv("LOCATION") or os.getenv("GCP_LOCATION") or "us-central1"
-vertex_model = f"projects/{project_id}/locations/{location}/publishers/google/models/gemini-2.5-flash"
+from app.app_utils.vertex_gemini import get_model
 
 root_agent = AdkAgent(
-    model=vertex_model,
+    model=get_model("gemini-2.5-flash"),
     name='simple_form_agent',
     description='Managed GEAP agent for rendering a contact form and saving details.',
     instruction=SYSTEM_INSTRUCTION,
