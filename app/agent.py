@@ -14,8 +14,12 @@ from google.genai import types
 from app.prompt import SYSTEM_INSTRUCTION
 from app.tools import show_contact_form, save_contact, consultAgent, discover_agents
 
+project_id = os.getenv("PROJECT_ID") or os.getenv("GCP_PROJECT_ID") or "hubscape-geap"
+location = os.getenv("LOCATION") or os.getenv("GCP_LOCATION") or "us-central1"
+vertex_model = f"projects/{project_id}/locations/{location}/publishers/google/models/gemini-2.5-flash"
+
 root_agent = AdkAgent(
-    model='gemini-2.5-flash',
+    model=vertex_model,
     name='simple_form_agent',
     description='Managed GEAP agent for rendering a contact form and saving details.',
     instruction=SYSTEM_INSTRUCTION,
