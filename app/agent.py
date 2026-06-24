@@ -43,7 +43,9 @@ class SimpleFormAgent:
         
         # Stable UUID
         agent_uuid = str(uuid.uuid5(uuid.NAMESPACE_URL, "https://github.com/Zco-AI-Labs/simple-form-agent"))
-        project_id = os.getenv("PROJECT_ID") or os.getenv("GCP_PROJECT_ID") or "hubscape-geap"
+        project_id = os.getenv("PROJECT_ID") or os.getenv("GCP_PROJECT_ID")
+        if not project_id:
+            raise KeyError("Environment variable PROJECT_ID or GCP_PROJECT_ID is required but not set.")
         
         remote_ctx = hubscape_adk.RemoteContext(
             user_id=user_id, agent_id=agent_uuid, org_id=org_id, hub_id=hub_id,
