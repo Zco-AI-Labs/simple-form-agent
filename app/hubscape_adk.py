@@ -182,4 +182,7 @@ def context_session(context: RemoteContext) -> Generator[None, None, None]:
     try:
         yield
     finally:
-        _current_context.reset(token)
+        try:
+            _current_context.reset(token)
+        except ValueError:
+            pass
