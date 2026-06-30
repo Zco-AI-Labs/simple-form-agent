@@ -13,6 +13,7 @@ from google.adk.agents.invocation_context import InvocationContext
 
 logger = logging.getLogger(__name__)
 
+@hubscape_adk.require_tool_privilege
 def show_contact_form() -> str:
     """Displays the contact request form widget to the user to collect their details."""
     try:
@@ -22,6 +23,7 @@ def show_contact_form() -> str:
     except Exception as e:
         return f"Error displaying contact form: {str(e)}"
 
+@hubscape_adk.require_tool_privilege
 def save_contact(name: str, email: str, description: str) -> dict:
     """Saves a contact/help request form submission to the hub's agent data in Firestore.
 
@@ -51,6 +53,7 @@ def save_contact(name: str, email: str, description: str) -> dict:
         return {"status": "error", "message": f"Failed to save request: {str(e)}"}
 
 
+@hubscape_adk.require_tool_privilege
 async def consultAgent(agentId: str, query: str) -> str:
     """
     Consults a specialized subagent (e.g. todo_agent, knowledge_agent, admin_ui_agent).
@@ -282,6 +285,7 @@ async def consultAgent(agentId: str, query: str) -> str:
         return f"Error: Failed to consult subagent '{agentId}': {str(e)}"
 
 
+@hubscape_adk.require_tool_privilege
 def discover_agents(query: str = None) -> list:
     """
     Search and discover registered A2A subagents whitelisted for the active user session.
